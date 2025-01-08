@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Music Player</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="butterfly.css">
+    <link rel="stylesheet" href="balloon.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="snail.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: black;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            transition: background-color 2s ease;
+            overflow: hidden;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: all 1s ease;
+            z-index: 1;
+        }
+
+        .background.active {
+            opacity: 1;
+        }
+
+        /* Night Sky Elements */
+        .night-sky {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #0f1729 0%, #1c3a5e 100%);
+            opacity: 0;
+            transition: opacity 1s ease;
+            z-index: 1;
+        }
+
+        .moon {
+            position: fixed;
+            top: 50px;
+            right: 50px;
+            width: 100px;
+            height: 100px;
+            background: transparent;
+            border-radius: 50%;
+            box-shadow: -15px 15px 0 #e5ff00;
+            animation: moonMove 8s infinite ease-in-out;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1.5s infinite ease-in-out;
+        }
+
+        @keyframes moonMove {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        /* Flower container styles */
+        .flowers {
+            position: fixed;
+            top: ;
+            left:   ;
+            transform: translate(-50%, -50%) scale(0.7);
+            z-index: 2;
+            transition: all 1s ease;
+        }
+
+        /* Default neon green colors */
+        .flower__leafs .flower__leaf {
+            background: #39ff14;
+            transition: background-color 2s ease;
+        }
+
+        .flower__leafs .flower__light {
+            background: rgba(57, 255, 20, 0.3);
+            transition: background-color 2s ease;
+        }
+
+        /* Putali song colors */
+        body[data-song="putali"] .flower__leafs--1 .flower__leaf {
+            background: #ff0000;
+        }
+        body[data-song="putali"] .flower__leafs--2 .flower__leaf {
+            background: #ffa500;
+        }
+        body[data-song="putali"] .flower__leafs--3 .flower__leaf {
+            background: #ffff00;
+        }
+
+        /* Yellow song colors */
+        body[data-song="yellow"] .flower__leafs .flower__leaf {
+            background: #ffe600;
+        }
+
+        body[data-song="yellow"] .flower__leafs .flower__light {
+            background: rgba(255, 235, 59, 0.3);
+        }
+
+        /* Beach Bunny song colors */
+        @keyframes beachBunnyFlowers1 {
+            0%, 100% { background: #0044ff; }
+            33% { background: #ff5e00; }
+            66% { background: #ffffff; }
+        }
+
+        @keyframes beachBunnyFlowers2 {
+            0%, 100% { background: #fffcff; }
+            33% { background: #0044ff; }
+            66% { background: #ff5e00; }
+        }
+
+        @keyframes beachBunnyFlowers3 {
+            0%, 100% { background: #ff5e00; }
+            33% { background: #fcfbfc; }
+            66% { background: #0044ff; }
+        }
+
+        body[data-song="beachbunny"] .flower__leafs--1 .flower__leaf {
+            animation: beachBunnyFlowers1 12s infinite;
+        }
+        body[data-song="beachbunny"] .flower__leafs--2 .flower__leaf {
+            animation: beachBunnyFlowers2 12s infinite;
+        }
+        body[data-song="beachbunny"] .flower__leafs--3 .flower__leaf {
+            animation: beachBunnyFlowers3 12s infinite;
+        }
+
+        @keyframes backgroundChange {
+            0%, 100% { background-color: #75b5db; }
+            33% { background-color: #9884ac; }
+            66% { background-color: #dbd975; }
+        }
+
+        .music-player {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            width: 350px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 3;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .player-content {
+            padding: 20px;
+        }
+
+        .album-cover {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            background-color: #333;
+        }
+
+        .song-info {
+            margin-top: 20px;
+            text-align: center;
+            color: inherit;
+        }
+
+        .song-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .controls button {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .controls button:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        .song-note {
+            font-size: 16px;
+            color: rgba(255,255,255,0.8);
+            margin-top: 10px;
+        }
+
+        .note-button {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 3;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            color: white;
+            font-size: 24px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .note-button:hover {
+            transform: scale(1.1);
+        }
+
+        .note-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 1000px;
+            height: 80vh;
+            background: rgba(255,255,255,0.95);
+            padding: 40px;
+            border-radius: 20px;
+            z-index: 4;
+            text-align: center;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .note-content {
+            padding: 40px;
+        }
+
+        .note-content h1 {
+            font-size: 48px;
+            color: #333;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #FF69B4, #FF1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .note-content p {
+            font-size: 24px;
+            line-height: 1.8;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: justify;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+            transition: transform 0.3s ease;
+        }
+
+        .close-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Hide animations by default */
+        .stage, #balloon-container, #snail, #slime {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Show animations only when playing specific songs */
+        body[data-song="putali"][data-playing="true"] .stage {
+            display: block;
+            opacity: 1;
+        }
+
+        body[data-song="beachbunny"][data-playing="true"] #balloon-container,
+        body[data-song="beachbunny"][data-playing="true"] #snail,
+        body[data-song="beachbunny"][data-playing="true"] #slime {
+            display: block;
+            opacity: 1;
+        }
+
+        body[data-song="yellow"][data-playing="true"] .night-sky {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+  <body class="not-loaded">
+    <div class="night"></div>
+    <div class="flowers">
+      <div class="flower flower--1">
+        <div class="flower__leafs flower__leafs--1">
+          <div class="flower__leaf flower__leaf--1"></div>
+          <div class="flower__leaf flower__leaf--2"></div>
+          <div class="flower__leaf flower__leaf--3"></div>
+          <div class="flower__leaf flower__leaf--4"></div>
+          <div class="flower__white-circle"></div>
+  
+          <div class="flower__light flower__light--1"></div>
+          <div class="flower__light flower__light--2"></div>
+          <div class="flower__light flower__light--3"></div>
+          <div class="flower__light flower__light--4"></div>
+          <div class="flower__light flower__light--5"></div>
+          <div class="flower__light flower__light--6"></div>
+          <div class="flower__light flower__light--7"></div>
+          <div class="flower__light flower__light--8"></div>
+  
+        </div>
+        <div class="flower__line">
+          <div class="flower__line__leaf flower__line__leaf--1"></div>
+          <div class="flower__line__leaf flower__line__leaf--2"></div>
+          <div class="flower__line__leaf flower__line__leaf--3"></div>
+          <div class="flower__line__leaf flower__line__leaf--4"></div>
+          <div class="flower__line__leaf flower__line__leaf--5"></div>
+          <div class="flower__line__leaf flower__line__leaf--6"></div>
+        </div>
+      </div>
+  
+      <div class="flower flower--2">
+        <div class="flower__leafs flower__leafs--2">
+          <div class="flower__leaf flower__leaf--1"></div>
+          <div class="flower__leaf flower__leaf--2"></div>
+          <div class="flower__leaf flower__leaf--3"></div>
+          <div class="flower__leaf flower__leaf--4"></div>
+          <div class="flower__white-circle"></div>
+  
+          <div class="flower__light flower__light--1"></div>
+          <div class="flower__light flower__light--2"></div>
+          <div class="flower__light flower__light--3"></div>
+          <div class="flower__light flower__light--4"></div>
+          <div class="flower__light flower__light--5"></div>
+          <div class="flower__light flower__light--6"></div>
+          <div class="flower__light flower__light--7"></div>
+          <div class="flower__light flower__light--8"></div>
+  
+        </div>
+        <div class="flower__line">
+          <div class="flower__line__leaf flower__line__leaf--1"></div>
+          <div class="flower__line__leaf flower__line__leaf--2"></div>
+          <div class="flower__line__leaf flower__line__leaf--3"></div>
+          <div class="flower__line__leaf flower__line__leaf--4"></div>
+        </div>
+      </div>
+  
+      <div class="flower flower--3">
+        <div class="flower__leafs flower__leafs--3">
+          <div class="flower__leaf flower__leaf--1"></div>
+          <div class="flower__leaf flower__leaf--2"></div>
+          <div class="flower__leaf flower__leaf--3"></div>
+          <div class="flower__leaf flower__leaf--4"></div>
+          <div class="flower__white-circle"></div>
+  
+          <div class="flower__light flower__light--1"></div>
+          <div class="flower__light flower__light--2"></div>
+          <div class="flower__light flower__light--3"></div>
+          <div class="flower__light flower__light--4"></div>
+          <div class="flower__light flower__light--5"></div>
+          <div class="flower__light flower__light--6"></div>
+          <div class="flower__light flower__light--7"></div>
+          <div class="flower__light flower__light--8"></div>
+  
+        </div>
+        <div class="flower__line">
+          <div class="flower__line__leaf flower__line__leaf--1"></div>
+          <div class="flower__line__leaf flower__line__leaf--2"></div>
+          <div class="flower__line__leaf flower__line__leaf--3"></div>
+          <div class="flower__line__leaf flower__line__leaf--4"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:1.2s">
+        <div class="flower__g-long">
+          <div class="flower__g-long__top"></div>
+          <div class="flower__g-long__bottom"></div>
+        </div>
+      </div>
+  
+      <div class="growing-grass">
+        <div class="flower__grass flower__grass--1">
+          <div class="flower__grass--top"></div>
+          <div class="flower__grass--bottom"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--1"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--2"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--3"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--4"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--5"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--6"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--7"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--8"></div>
+          <div class="flower__grass__overlay"></div>
+        </div>
+      </div>
+  
+      <div class="growing-grass">
+        <div class="flower__grass flower__grass--2">
+          <div class="flower__grass--top"></div>
+          <div class="flower__grass--bottom"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--1"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--2"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--3"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--4"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--5"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--6"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--7"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--8"></div>
+          <div class="flower__grass__overlay"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:2.4s">
+        <div class="flower__g-right flower__g-right--1">
+          <div class="leaf"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:2.8s">
+        <div class="flower__g-right flower__g-right--2">
+          <div class="leaf"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:2.8s">
+        <div class="flower__g-front">
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--1">
+            <div class="flower__g-front__leaf"></div>
+          </div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--2">
+            <div class="flower__g-front__leaf"></div>
+          </div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--3">
+            <div class="flower__g-front__leaf"></div>
+          </div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--4">
+            <div class="flower__g-front__leaf"></div>
+          </div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--5">
+            <div class="flower__g-front__leaf"></div>
+          </div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--6">
+            <div class="flower__g-front__leaf"></div>
+          </div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--7">
+            <div class="flower__g-front__leaf"></div>
+          </div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--8">
+            <div class="flower__g-front__leaf"></div>
+          </div>
+          <div class="flower__g-front__line"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:3.2s">
+        <div class="flower__g-fr">
+          <div class="leaf"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--1"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--2"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--3"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--4"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--5"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--6"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--7"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--8"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--0">
+        <div class="grow-ans" style="--d:3s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:2.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.4s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--1">
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.8s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:4s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--2">
+        <div class="grow-ans" style="--d:4s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.4s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--3">
+        <div class="grow-ans" style="--d:4s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:3s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--4">
+        <div class="grow-ans" style="--d:4s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:3s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--5">
+        <div class="grow-ans" style="--d:4s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:3s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--6">
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.4s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.6s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.8s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--7">
+        <div class="grow-ans" style="--d:3s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.5s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+    
+    <div id="background" class="background"></div>
+    <div class="night-sky" id="nightSky">
+        <div class="moon"></div>
+        <!-- Stars will be added dynamically -->
+    </div>
+
+    <!-- Butterfly Animation -->
+    <div class="stage">
+        <div class="mariposa">
+            <div class="mariposa-turn">
+                <div class="mariposa-flutter"></div>
+            </div>
+        </div>
+        <div class="mariposa">
+            <div class="mariposa-turn">
+                <div class="mariposa-flutter"></div>
+            </div>
+        </div>
+        <div class="mariposa">
+            <div class="mariposa-turn">
+                <div class="mariposa-flutter"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Snail Animation -->
+    <div id="snail">
+      <div id="shell"></div>
+      <div id="slug">
+        <div class="eye-stalk eye-stalk-left">
+          <div class="eye"></div>
+        </div>
+        <div class="eye-stalk eye-stalk-right">
+          <div class="eye"></div>
+        </div>
+      </div>
+    </div>
+    <div id="slime"></div>
+    
+    <!-- Balloon Container -->
+    <div id="balloon-container"></div>
+
+    <div class="music-player">
+        <div class="player-content">
+            <img id="albumCover" class="album-cover" alt="Album Cover">
+            <div class="song-info">
+                <h3 id="songTitle" class="song-title"></h3>
+                <div class="controls">
+                    <button onclick="previousSong()"><i class="fas fa-backward"></i></button>
+                    <button id="playButton" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+                    <button onclick="nextSong()"><i class="fas fa-forward"></i></button>
+                </div>  
+                <p id="songNote" class="song-note"></p>
+            </div>
+        </div>
+    </div>
+
+    <button class="note-button" onclick="toggleNote()">
+        <i class="fas fa-heart"></i>
+    </button>
+
+    <div id="notePanel" class="note-panel">
+        <div class="note-content">
+            <h1>Happy 2 Years Baby! ❤️</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus eos dolorum itaque, ipsa debitis reiciendis quisquam earum, esse a magni eaque officia quos! Nobis quo atque eos vitae officiis adipisci?</p>
+        </div>
+        <button class="close-button" onclick="toggleNote()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script>
+        // Create stars for the night sky
+        function createStars() {
+            const nightSky = document.getElementById('nightSky');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                nightSky.appendChild(star);
+            }
+        }
+
+        createStars();
+
+        onload = () => {
+            const c = setTimeout(() => {
+                document.body.classList.remove("not-loaded");
+                clearTimeout(c);
+            }, 1000);
+        };
+
+        const songs = [
+            {
+                title: "Putali Jhai Udi Basamla",
+                cover: "putali.jpeg",
+                audio: "putali.mp3",
+                note: "Our first relationship song",
+                songId: "putali",
+                background: "firstbackground.png"
+            },
+            {
+                title: "Beach Bunny - Cloud 9",
+                cover: "beachbunny.jpeg",
+                audio: "beechbunny.mp3",
+                note: "Our second relationship song",
+                songId: "beachbunny",
+                backgroundColor: true
+            },
+            {
+                title: "Coldplay - Yellow",
+                cover: "yellowcover.png",
+                audio: "yellow.mp3",
+                note: "Trying to learn a guitar and sing a song for you",
+                songId: "yellow",
+                backgroundColor: false,
+                nightSky: true
+            }
+        ];
+
+        let currentSong = 0;
+        let isPlaying = false;
+        let audio = new Audio();
+        let balloonInterval;
+        let balloonTimeout;
+        
+        function createBalloons() {
+            const container = document.getElementById("balloon-container");
+            container.innerHTML = '';
+            for (let i = 0; i < 30; i++) {
+                const balloon = document.createElement("div");
+                balloon.className = "balloon";
+                balloon.style.cssText = getRandomStyles();
+                container.appendChild(balloon);
+            }
+
+            // Set timeout for next balloon creation
+            clearTimeout(balloonTimeout);
+            balloonTimeout = setTimeout(() => {
+                if (isPlaying && songs[currentSong].songId === 'beachbunny') {
+                    createBalloons();
+                }
+            }, 20000); // 10s for animation + 10s delay
+        }
+
+        function getRandomStyles() {
+            const colors = [
+                'rgba(255,158,205,0.7)',  // Pink
+                'rgba(180,247,255,0.7)',  // Light Blue
+                'rgba(143,184,255,0.7)'   // Blue
+            ];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            const mt = Math.floor(Math.random() * 200);
+            const ml = Math.floor(Math.random() * 50);
+            const dur = Math.floor(Math.random() * 5) + 5;
+            return `
+                background-color: ${randomColor};
+                color: ${randomColor}; 
+                box-shadow: inset -7px -3px 10px ${randomColor.replace('0.7', '0.9')};
+                margin: ${mt}px 0 0 ${ml}px;
+                animation: float ${dur}s ease-in infinite
+            `;
+        }
+
+        function updatePlayer() {
+            const song = songs[currentSong];
+            document.getElementById('songTitle').textContent = song.title;
+            document.getElementById('albumCover').src = song.cover;
+            document.getElementById('songNote').textContent = song.note;
+            audio.src = song.audio;
+            
+            // Update body attributes for animations
+            document.body.setAttribute('data-song', song.songId);
+            document.body.setAttribute('data-playing', isPlaying.toString());
+            
+            const background = document.getElementById('background');
+            const nightSky = document.getElementById('nightSky');
+            background.style.animation = '';
+            
+            // Clear all previous animations/backgrounds
+            background.style.backgroundImage = '';
+            background.classList.remove('active');
+            nightSky.style.display = 'none';
+            clearTimeout(balloonTimeout);
+            
+            if (song.backgroundColor) {
+                background.style.animation = 'backgroundChange 15s infinite';
+            } else if (song.nightSky) {
+                nightSky.style.display = isPlaying ? 'block' : 'none';
+                nightSky.style.opacity = isPlaying ? '1' : '0';
+            } else {
+                background.style.backgroundImage = `url(${song.background})`;
+            }
+            
+            if (!isPlaying) {
+                background.classList.remove('active');
+                nightSky.style.opacity = '0';
+            } else {
+                if (!song.nightSky) {
+                    background.classList.add('active');
+                }
+                
+                // Start balloon animation for Beach Bunny if playing
+                if (song.songId === 'beachbunny') {
+                    createBalloons();
+                }
+            }
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            const playButton = document.getElementById('playButton');
+            const background = document.getElementById('background');
+            const nightSky = document.getElementById('nightSky');
+            
+            document.body.setAttribute('data-playing', isPlaying.toString());
+            
+            if (isPlaying) {
+                playButton.innerHTML = '<i class="fas fa-pause"></i>';
+                audio.play();
+                
+                const currentSongData = songs[currentSong];
+                if (currentSongData.nightSky) {
+                    nightSky.style.display = 'block';
+                    nightSky.style.opacity = '1';
+                } else {
+                    background.classList.add('active');
+                }
+                
+                // Start balloon animation if it's Beach Bunny song
+                if (currentSongData.songId === 'beachbunny') {
+                    createBalloons();
+                }
+            } else {
+                playButton.innerHTML = '<i class="fas fa-play"></i>';
+                audio.pause();
+                background.classList.remove('active');
+                nightSky.style.opacity = '0';
+                clearTimeout(balloonTimeout);
+            }
+        }
+
+        function previousSong() {
+            currentSong = (currentSong - 1 + songs.length) % songs.length;
+            clearTimeout(balloonTimeout);
+            updatePlayer();
+            if (isPlaying) {
+                audio.play();
+            }
+        }
+
+        function nextSong() {
+            currentSong = (currentSong + 1) % songs.length;
+            clearTimeout(balloonTimeout);
+            updatePlayer();
+            if (isPlaying) {
+                audio.play();
+            }
+        }
+
+        function toggleNote() {
+            const notePanel = document.getElementById('notePanel');
+            const currentDisplay = notePanel.style.display;
+            notePanel.style.display = currentDisplay === 'none' ? 'block' : 'none';
+            
+            if (notePanel.style.display === 'block') {
+                notePanel.style.opacity = '0';
+                setTimeout(() => {
+                    notePanel.style.opacity = '1';
+                }, 10);
+            }
+        }
+
+        // Initialize the player
+        updatePlayer();
+
+        // Add audio ended event listener
+        audio.addEventListener('ended', () => {
+            nextSong();
+        });
+
+        // Clean up when leaving page
+        window.addEventListener('beforeunload', () => {
+            clearTimeout(balloonTimeout);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+#snail {
+  height: 120px;
+  width: 150px;
+  position: absolute;
+  z-index: 1;
+  top: 100px;
+  left: -120px;
+  animation: 25s snailCrawl linear infinite;
+}
+
+#shell {
+  height: 80px;
+  width: 80px;
+  border-radius: 100%;
+  background: #FFB6C1;
+  position: absolute;
+  z-index: 1;
+  top: 10px;
+  left: 30px;
+}
+
+#slug {
+  width: 140px;
+  height: 70px;
+  position: absolute;
+  bottom: 0;
+  right: -20px;
+  background: #FFFACD;
+  border-radius: 35px;
+  animation: 1.25s slugSquish ease-in-out infinite;
+}
+
+.eye-stalk {
+  position: absolute;
+  width: 8px;
+  height: 40px;
+  background: #FFFACD;
+  top: -35px;
+  border-radius: 4px;
+}
+
+.eye-stalk-left {
+  right: 45px;
+  transform: rotate(-10deg);
+}
+
+.eye-stalk-right {
+  right: 15px;
+  transform: rotate(10deg);
+}
+
+.eye {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #FFF;
+  border: 2px solid #000;
+  border-radius: 50%;
+  top: -15px;
+  left: -6px;
+}
+
+.eye::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #000;
+  border-radius: 50%;
+  top: 6px;
+  left: 6px;
+}
+
+#slime {
+  height: 5px;
+  width: 50%;
+  background: rgba(255, 250, 205, 0.5);
+  position: absolute;
+  z-index: 0;
+  top: 172px;
+  left: -50%;
+  animation: 25s slimeSpread linear infinite;
+  border-radius: 3px;
+}
+
+@keyframes snailCrawl {
+  0% { left: -120px; }
+  100% { left: calc(100% + 120px); }
+}
+
+@keyframes slimeSpread {
+  0% {
+    left: -50%;
+    opacity: 0.5;
+  }
+  95% {
+    opacity: 0.5;
+  }
+  100% {
+    left: calc(50% + 240px);
+    opacity: 0;
+  }
+}
+
+@keyframes slugSquish {
+  0% {
+    width: 140px;
+    right: -20px;
+  }
+  50% {
+    width: 130px;
+    right: -15px;
+  }
+  100% {
+    width: 140px;
+    right: -20px;
+  }
+}

@@ -3,334 +3,321 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special Music Player</title>
+    <title>For You Apekshya</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="butterfly.css">
     <link rel="stylesheet" href="balloon.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="snail.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            background-color: black;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            transition: background-color 2s ease;
-            overflow: hidden;
-        }
+body {
+    background-color: black;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    transition: background-color 2s ease;
+    overflow: hidden;
+}
 
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0;
-            transition: all 1s ease;
-            z-index: 1;
-        }
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: all 1s ease;
+    z-index: 1;
+}
 
-        .background.active {
-            opacity: 1;
-        }
+.background.active {
+    opacity: 1;
+}
 
-        /* Night Sky Elements */
-        .night-sky {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, #0f1729 0%, #1c3a5e 100%);
-            opacity: 0;
-            transition: opacity 1s ease;
-            z-index: 1;
-        }
+/* Night Sky Elements */
+.night-sky {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #0f1729 0%, #1c3a5e 100%);
+    opacity: 0;
+    transition: opacity 1s ease;
+    z-index: 1;
+}
 
-        .moon {
-            position: fixed;
-            top: 50px;
-            right: 50px;
-            width: 100px;
-            height: 100px;
-            background: transparent;
-            border-radius: 50%;
-            box-shadow: -15px 15px 0 #e5ff00;
-            animation: moonMove 8s infinite ease-in-out;
-        }
+.moon {
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    width: 100px;
+    height: 100px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: -15px 15px 0 #e5ff00;
+    animation: moonMove 8s infinite ease-in-out;
+}
 
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 1.5s infinite ease-in-out;
-        }
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 1.5s infinite ease-in-out;
+}
 
-        @keyframes moonMove {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
+@keyframes moonMove {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
-        }
+@keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
 
-        /* Flower container styles */
-        .flowers {
-            position: fixed;
-            top: ;
-            left:   ;
-            transform: translate(-50%, -50%) scale(0.7);
-            z-index: 2;
-            transition: all 1s ease;
-        }
+/* Flower container styles */
+.flowers {
+    position: fixed;
+    top: ;
+    left: ;
+    transform: translate(-50%, -50%) scale(0.7);
+    z-index: 2;
+    transition: all 1s ease;
+}
 
-        /* Default neon green colors */
-        .flower__leafs .flower__leaf {
-            background: #39ff14;
-            transition: background-color 2s ease;
-        }
+/* Default neon green colors */
+.flower__leafs .flower__leaf {
+    background: #39ff14;
+    transition: background-color 2s ease;
+}
 
-        .flower__leafs .flower__light {
-            background: rgba(57, 255, 20, 0.3);
-            transition: background-color 2s ease;
-        }
+.flower__leafs .flower__light {
+    background: rgba(57, 255, 20, 0.3);
+    transition: background-color 2s ease;
+}
 
-        /* Putali song colors */
-        body[data-song="putali"] .flower__leafs--1 .flower__leaf {
-            background: #ff0000;
-        }
-        body[data-song="putali"] .flower__leafs--2 .flower__leaf {
-            background: #ffa500;
-        }
-        body[data-song="putali"] .flower__leafs--3 .flower__leaf {
-            background: #ffff00;
-        }
+/* Putali song colors - keeping original */
+body[data-song="putali"] .flower__leafs--1 .flower__leaf {
+    background: #ff0000;
+}
+body[data-song="putali"] .flower__leafs--2 .flower__leaf {
+    background: #ffa500;
+}
+body[data-song="putali"] .flower__leafs--3 .flower__leaf {
+    background: #ffff00;
+}
 
-        /* Yellow song colors */
-        body[data-song="yellow"] .flower__leafs .flower__leaf {
-            background: #ffe600;
-        }
+/* Yellow song colors - keeping original */
+body[data-song="yellow"] .flower__leafs .flower__leaf {
+    background: #ffe600;
+}
 
-        body[data-song="yellow"] .flower__leafs .flower__light {
-            background: rgba(255, 235, 59, 0.3);
-        }
+body[data-song="yellow"] .flower__leafs .flower__light {
+    background: rgba(255, 235, 59, 0.3);
+}
 
-        /* Beach Bunny song colors */
-        @keyframes beachBunnyFlowers1 {
-            0%, 100% { background: #0044ff; }
-            33% { background: #ff5e00; }
-            66% { background: #ffffff; }
-        }
+/* Beach Bunny song colors - new fixed colors */
+body[data-song="beachbunny"] .flower__leafs--1 .flower__leaf {
+    background: #FFB6C1; /* Light goldenrod yellow */
+}
+body[data-song="beachbunny"] .flower__leafs--2 .flower__leaf {
+    background: #FFB6C1; /* White */
+}
+body[data-song="beachbunny"] .flower__leafs--3 .flower__leaf {
+    background: #FFB6C1; /* Light pink */
+}
 
-        @keyframes beachBunnyFlowers2 {
-            0%, 100% { background: #fffcff; }
-            33% { background: #0044ff; }
-            66% { background: #ff5e00; }
-        }
+@keyframes backgroundChange {
+    0%, 100% { background-color: #75b5db; }
+    50% { background-color: #9884ac; }
+}
 
-        @keyframes beachBunnyFlowers3 {
-            0%, 100% { background: #ff5e00; }
-            33% { background: #fcfbfc; }
-            66% { background: #0044ff; }
-        }
+.music-player {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    width: 350px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 3;
+    border: 1px solid rgba(255,255,255,0.1);
+}
 
-        body[data-song="beachbunny"] .flower__leafs--1 .flower__leaf {
-            animation: beachBunnyFlowers1 12s infinite;
-        }
-        body[data-song="beachbunny"] .flower__leafs--2 .flower__leaf {
-            animation: beachBunnyFlowers2 12s infinite;
-        }
-        body[data-song="beachbunny"] .flower__leafs--3 .flower__leaf {
-            animation: beachBunnyFlowers3 12s infinite;
-        }
+.player-content {
+    padding: 20px;
+}
 
-        @keyframes backgroundChange {
-            0%, 100% { background-color: #75b5db; }
-            33% { background-color: #9884ac; }
-            66% { background-color: #dbd975; }
-        }
+.album-cover {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    background-color: #333;
+}
 
-        .music-player {
-            position: fixed;
-            top: 30px;
-            left: 30px;
-            width: 350px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 3;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+.song-info {
+    margin-top: 20px;
+    text-align: center;
+    color: inherit;
+}
 
-        .player-content {
-            padding: 20px;
-        }
+.song-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+}
 
-        .album-cover {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            background-color: #333;
-        }
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+}
 
-        .song-info {
-            margin-top: 20px;
-            text-align: center;
-            color: inherit;
-        }
+.controls button {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 24px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
 
-        .song-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 10px;
-        }
+.controls button:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.1);
+}
 
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
-        }
+.song-note {
+    font-size: 16px;
+    color: rgba(255,255,255,0.8);
+    margin-top: 10px;
+}
 
-        .controls button {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 24px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
+.note-button {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 3;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    color: white;
+    font-size: 24px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease;
+}
 
-        .controls button:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.1);
-        }
+.note-button:hover {
+    transform: scale(1.1);
+}
 
-        .song-note {
-            font-size: 16px;
-            color: rgba(255,255,255,0.8);
-            margin-top: 10px;
-        }
+/* Updated Note Panel Styles */
+.note-panel {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%;
+    max-width: 1400px;
+    height: 90vh;
+    background: rgba(255,255,255,0.98);
+    padding: 50px;
+    border-radius: 30px;
+    z-index: 4;
+    text-align: center;
+    overflow-y: auto;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
 
-        .note-button {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            z-index: 3;
-            background: rgba(255,255,255,0.1);
-            border: none;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            cursor: pointer;
-            color: white;
-            font-size: 24px;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
-        }
+.note-content {
+    padding: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-        .note-button:hover {
-            transform: scale(1.1);
-        }
+.note-content h1 {
+    font-size: 42px;
+    color: #333;
+    margin-bottom: 40px;
+    background: linear-gradient(45deg, #FF69B4, #FF1493);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Georgia', serif;
+}
 
-        .note-panel {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 1000px;
-            height: 80vh;
-            background: rgba(255,255,255,0.95);
-            padding: 40px;
-            border-radius: 20px;
-            z-index: 4;
-            text-align: center;
-            overflow-y: auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
+.note-content p {
+    font-size: 18px;
+    line-height: 1.9;
+    color: #444;
+    margin: 0 auto;
+    text-align: justify;
+    font-family: 'Arial', sans-serif;
+    letter-spacing: 0.3px;
+}
 
-        .note-content {
-            padding: 40px;
-        }
+.close-button {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #333;
+    transition: transform 0.3s ease;
+    padding: 10px;
+}
 
-        .note-content h1 {
-            font-size: 48px;
-            color: #333;
-            margin-bottom: 30px;
-            background: linear-gradient(45deg, #FF69B4, #FF1493);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
+.close-button:hover {
+    transform: scale(1.1);
+}
 
-        .note-content p {
-            font-size: 24px;
-            line-height: 1.8;
-            color: #666;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: justify;
-        }
+/* Hide animations by default */
+.stage, #balloon-container, #snail, #slime {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
 
-        .close-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #333;
-            transition: transform 0.3s ease;
-        }
+/* Show animations only when playing specific songs */
+body[data-song="putali"][data-playing="true"] .stage {
+    display: block;
+    opacity: 1;
+}
 
-        .close-button:hover {
-            transform: scale(1.1);
-        }
+body[data-song="beachbunny"][data-playing="true"] #balloon-container,
+body[data-song="beachbunny"][data-playing="true"] #snail,
+body[data-song="beachbunny"][data-playing="true"] #slime {
+    display: block;
+    opacity: 1;
+}
 
-        /* Hide animations by default */
-        .stage, #balloon-container, #snail, #slime {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        /* Show animations only when playing specific songs */
-        body[data-song="putali"][data-playing="true"] .stage {
-            display: block;
-            opacity: 1;
-        }
-
-        body[data-song="beachbunny"][data-playing="true"] #balloon-container,
-        body[data-song="beachbunny"][data-playing="true"] #snail,
-        body[data-song="beachbunny"][data-playing="true"] #slime {
-            display: block;
-            opacity: 1;
-        }
-
-        body[data-song="yellow"][data-playing="true"] .night-sky {
-            display: block;
-            opacity: 1;
-        }
+body[data-song="yellow"][data-playing="true"] .night-sky {
+    display: block;
+    opacity: 1;
+}
     </style>
 </head>
 <body>
@@ -697,8 +684,8 @@
 
     <div id="notePanel" class="note-panel">
         <div class="note-content">
-            <h1>Happy 2 Years Baby! ❤️</h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus eos dolorum itaque, ipsa debitis reiciendis quisquam earum, esse a magni eaque officia quos! Nobis quo atque eos vitae officiis adipisci?</p>
+            <h1>Happy Anniversery Baby! ❤️</h1>
+            <p> </p>
         </div>
         <button class="close-button" onclick="toggleNote()">
             <i class="fas fa-times"></i>
@@ -735,7 +722,7 @@
                 title: "Putali Jhai Udi Basamla",
                 cover: "putali.jpeg",
                 audio: "putali.mp3",
-                note: "Our first relationship song",
+                note: "Your favourite song when we first dated.",
                 songId: "putali",
                 background: "firstbackground.png"
             },
@@ -743,7 +730,7 @@
                 title: "Beach Bunny - Cloud 9",
                 cover: "beachbunny.jpeg",
                 audio: "beechbunny.mp3",
-                note: "Our second relationship song",
+                note: "One of our old relationship song",
                 songId: "beachbunny",
                 backgroundColor: true
             },
@@ -751,7 +738,7 @@
                 title: "Coldplay - Yellow",
                 cover: "yellowcover.png",
                 audio: "yellow.mp3",
-                note: "Trying to learn a guitar and sing a song for you",
+                note: "Initially tried to play for you in my guitar but couldn't 😭",
                 songId: "yellow",
                 backgroundColor: false,
                 nightSky: true
